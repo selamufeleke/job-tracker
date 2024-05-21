@@ -13,6 +13,12 @@ function Dashboard() {
   const [status, setStatus] = useState("applied");
   const [appliedDate, setAppliedDate] = useState("");
   const [notes, setNotes] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [editCompany, setEditCompany] = useState("");
+  const [editRole, setEditRole] = useState("");
+  const [editStatus, setEditStatus] = useState("");
+  const [editAppliedDate, setEditAppliedDate] = useState("");
+  const [editNotes, setEditNotes] = useState("");
 
   const navigate = useNavigate();
 
