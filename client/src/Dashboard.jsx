@@ -68,6 +68,34 @@ function Dashboard() {
       setError("Could not delete application");
     }
   }
+  function startEdit(app) {
+    setEditingId(app.id);
+    setEditCompany(app.company);
+    setEditRole(app.role);
+    setEditStatus(app.status);
+    setEditAppliedDate(app.applied_date ? app.applied_date.split("T")[0] : "");
+    setEditNotes(app.notes || "");
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
+  }
+
+  async function handleSaveEdit(id) {
+    try {
+      await api.put(`/applications/${id}`, {
+        company: editCompany,
+        role: editRole,
+        status: editStatus,
+        applied_date: editAppliedDate || null,
+        notes: editNotes,
+      });
+      setEditingId(null);
+      fetchApplications();
+    } catch (err) {
+      setError("Could not update application");
+    }
+  }
 
   function handleLogout() {
     localStorage.removeItem("token");
