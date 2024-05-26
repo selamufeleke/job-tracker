@@ -193,22 +193,89 @@ function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            {applications.map((app) => (
-              <tr key={app.id} style={{ borderBottom: "1px solid #eee" }}>
-                <td style={{ padding: "8px" }}>{app.company}</td>
-                <td style={{ padding: "8px" }}>{app.role}</td>
-                <td style={{ padding: "8px" }}>{app.status}</td>
-                <td style={{ padding: "8px" }}>
-                  {app.applied_date
-                    ? new Date(app.applied_date).toLocaleDateString()
-                    : "-"}
-                </td>
-                <td style={{ padding: "8px" }}>{app.notes || "-"}</td>
-                <td style={{ padding: "8px" }}>
-                  <button onClick={() => handleDelete(app.id)}>Delete</button>
-                </td>
-              </tr>
-            ))}
+            {applications.map((app) =>
+              editingId === app.id ? (
+                <tr
+                  key={app.id}
+                  style={{
+                    borderBottom: "1px solid #eee",
+                    background: "#f9f9f9",
+                  }}
+                >
+                  <td style={{ padding: "8px" }}>
+                    <input
+                      value={editCompany}
+                      onChange={(e) => setEditCompany(e.target.value)}
+                      style={{ padding: "4px", width: "100px" }}
+                    />
+                  </td>
+                  <td style={{ padding: "8px" }}>
+                    <input
+                      value={editRole}
+                      onChange={(e) => setEditRole(e.target.value)}
+                      style={{ padding: "4px", width: "100px" }}
+                    />
+                  </td>
+                  <td style={{ padding: "8px" }}>
+                    <select
+                      value={editStatus}
+                      onChange={(e) => setEditStatus(e.target.value)}
+                      style={{ padding: "4px" }}
+                    >
+                      <option value="applied">Applied</option>
+                      <option value="interview">Interview</option>
+                      <option value="offer">Offer</option>
+                      <option value="rejected">Rejected</option>
+                    </select>
+                  </td>
+                  <td style={{ padding: "8px" }}>
+                    <input
+                      type="date"
+                      value={editAppliedDate}
+                      onChange={(e) => setEditAppliedDate(e.target.value)}
+                      style={{ padding: "4px" }}
+                    />
+                  </td>
+                  <td style={{ padding: "8px" }}>
+                    <input
+                      value={editNotes}
+                      onChange={(e) => setEditNotes(e.target.value)}
+                      style={{ padding: "4px", width: "120px" }}
+                    />
+                  </td>
+                  <td style={{ padding: "8px" }}>
+                    <button
+                      onClick={() => handleSaveEdit(app.id)}
+                      style={{ marginRight: "4px" }}
+                    >
+                      Save
+                    </button>
+                    <button onClick={cancelEdit}>Cancel</button>
+                  </td>
+                </tr>
+              ) : (
+                <tr key={app.id} style={{ borderBottom: "1px solid #eee" }}>
+                  <td style={{ padding: "8px" }}>{app.company}</td>
+                  <td style={{ padding: "8px" }}>{app.role}</td>
+                  <td style={{ padding: "8px" }}>{app.status}</td>
+                  <td style={{ padding: "8px" }}>
+                    {app.applied_date
+                      ? new Date(app.applied_date).toLocaleDateString()
+                      : "-"}
+                  </td>
+                  <td style={{ padding: "8px" }}>{app.notes || "-"}</td>
+                  <td style={{ padding: "8px" }}>
+                    <button
+                      onClick={() => startEdit(app)}
+                      style={{ marginRight: "4px" }}
+                    >
+                      Edit
+                    </button>
+                    <button onClick={() => handleDelete(app.id)}>Delete</button>
+                  </td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       )}
