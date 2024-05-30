@@ -23,38 +23,30 @@ function Register() {
   }
 
   return (
-    <div style={{ maxWidth: "400px", margin: "100px auto" }}>
-      <h2>Register</h2>
+    <div className="auth-container">
+      <h2>Create your account</h2>
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "10px" }}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: "100%", padding: "8px" }}
-            required
-          />
-        </div>
-        <div style={{ marginBottom: "10px" }}>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: "100%", padding: "8px" }}
-            required
-          />
-        </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        {error && <p className="error-text">{error}</p>}
         {success && (
-          <p style={{ color: "green" }}>
+          <p className="success-text">
             Account created! Redirecting to login...
           </p>
         )}
-        <button type="submit" style={{ width: "100%", padding: "8px" }}>
-          Register
-        </button>
+        <button type="submit">Register</button>
       </form>
       <p>
         Already have an account? <Link to="/login">Log in here</Link>

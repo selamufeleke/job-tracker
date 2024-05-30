@@ -7,12 +7,12 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Form state for adding a new application
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
   const [status, setStatus] = useState("applied");
   const [appliedDate, setAppliedDate] = useState("");
   const [notes, setNotes] = useState("");
+
   const [editingId, setEditingId] = useState(null);
   const [editCompany, setEditCompany] = useState("");
   const [editRole, setEditRole] = useState("");
@@ -47,13 +47,11 @@ function Dashboard() {
         applied_date: appliedDate || null,
         notes,
       });
-      // Clear the form
       setCompany("");
       setRole("");
       setStatus("applied");
       setAppliedDate("");
       setNotes("");
-      // Refresh the list
       fetchApplications();
     } catch (err) {
       setError("Could not add application");
@@ -68,6 +66,7 @@ function Dashboard() {
       setError("Could not delete application");
     }
   }
+
   function startEdit(app) {
     setEditingId(app.id);
     setEditCompany(app.company);
@@ -103,51 +102,30 @@ function Dashboard() {
   }
 
   return (
-    <div style={{ maxWidth: "800px", margin: "40px auto", padding: "0 20px" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+    <div className="dashboard-container">
+      <div className="dashboard-header">
         <h1>My Applications</h1>
-        <button onClick={handleLogout}>Log Out</button>
+        <button className="btn-secondary" onClick={handleLogout}>
+          Log Out
+        </button>
       </div>
 
-      {/* Add new application form */}
-      <form
-        onSubmit={handleAddApplication}
-        style={{
-          margin: "20px 0",
-          padding: "16px",
-          border: "1px solid #ccc",
-          borderRadius: "8px",
-        }}
-      >
+      <form className="add-form" onSubmit={handleAddApplication}>
         <h3>Add Application</h3>
-        <div style={{ marginBottom: "8px" }}>
+        <div>
           <input
             placeholder="Company"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
             required
-            style={{ padding: "6px", marginRight: "8px" }}
           />
           <input
             placeholder="Role"
             value={role}
             onChange={(e) => setRole(e.target.value)}
             required
-            style={{ padding: "6px", marginRight: "8px" }}
           />
-        </div>
-        <div style={{ marginBottom: "8px" }}>
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            style={{ padding: "6px", marginRight: "8px" }}
-          >
+          <select value={status} onChange={(e) => setStatus(e.target.value)}>
             <option value="applied">Applied</option>
             <option value="interview">Interview</option>
             <option value="offer">Offer</option>
@@ -157,70 +135,61 @@ function Dashboard() {
             type="date"
             value={appliedDate}
             onChange={(e) => setAppliedDate(e.target.value)}
-            style={{ padding: "6px" }}
           />
         </div>
-        <div style={{ marginBottom: "8px" }}>
+        <div>
           <input
             placeholder="Notes (optional)"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            style={{ padding: "6px", width: "300px" }}
+            style={{ width: "300px" }}
           />
         </div>
-        <button type="submit" style={{ padding: "6px 16px" }}>
-          Add
+        <button className="btn-primary" type="submit">
+          Add Application
         </button>
       </form>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="error-text">{error}</p>}
 
-      {/* List of applications */}
       {loading ? (
         <p>Loading...</p>
       ) : applications.length === 0 ? (
         <p>No applications yet. Add one above.</p>
       ) : (
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <table className="applications-table">
           <thead>
-            <tr style={{ borderBottom: "2px solid #ccc", textAlign: "left" }}>
-              <th style={{ padding: "8px" }}>Company</th>
-              <th style={{ padding: "8px" }}>Role</th>
-              <th style={{ padding: "8px" }}>Status</th>
-              <th style={{ padding: "8px" }}>Date</th>
-              <th style={{ padding: "8px" }}>Notes</th>
-              <th style={{ padding: "8px" }}></th>
+            <tr>
+              <th>Company</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Notes</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {applications.map((app) =>
               editingId === app.id ? (
-                <tr
-                  key={app.id}
-                  style={{
-                    borderBottom: "1px solid #eee",
-                    background: "#f9f9f9",
-                  }}
-                >
-                  <td style={{ padding: "8px" }}>
+                <tr key={app.id}>
+                  <td>
                     <input
                       value={editCompany}
                       onChange={(e) => setEditCompany(e.target.value)}
-                      style={{ padding: "4px", width: "100px" }}
+                      style={{ width: "100px" }}
                     />
                   </td>
-                  <td style={{ padding: "8px" }}>
+                  <td>
                     <input
                       value={editRole}
                       onChange={(e) => setEditRole(e.target.value)}
-                      style={{ padding: "4px", width: "100px" }}
+                      style={{ width: "100px" }}
                     />
                   </td>
-                  <td style={{ padding: "8px" }}>
+                  <td>
                     <select
                       value={editStatus}
                       onChange={(e) => setEditStatus(e.target.value)}
-                      style={{ padding: "4px" }}
                     >
                       <option value="applied">Applied</option>
                       <option value="interview">Interview</option>
@@ -228,50 +197,60 @@ function Dashboard() {
                       <option value="rejected">Rejected</option>
                     </select>
                   </td>
-                  <td style={{ padding: "8px" }}>
+                  <td>
                     <input
                       type="date"
                       value={editAppliedDate}
                       onChange={(e) => setEditAppliedDate(e.target.value)}
-                      style={{ padding: "4px" }}
                     />
                   </td>
-                  <td style={{ padding: "8px" }}>
+                  <td>
                     <input
                       value={editNotes}
                       onChange={(e) => setEditNotes(e.target.value)}
-                      style={{ padding: "4px", width: "120px" }}
+                      style={{ width: "120px" }}
                     />
                   </td>
-                  <td style={{ padding: "8px" }}>
+                  <td>
                     <button
+                      className="btn-small"
                       onClick={() => handleSaveEdit(app.id)}
-                      style={{ marginRight: "4px" }}
                     >
                       Save
                     </button>
-                    <button onClick={cancelEdit}>Cancel</button>
+                    <button className="btn-small" onClick={cancelEdit}>
+                      Cancel
+                    </button>
                   </td>
                 </tr>
               ) : (
-                <tr key={app.id} style={{ borderBottom: "1px solid #eee" }}>
-                  <td style={{ padding: "8px" }}>{app.company}</td>
-                  <td style={{ padding: "8px" }}>{app.role}</td>
-                  <td style={{ padding: "8px" }}>{app.status}</td>
-                  <td style={{ padding: "8px" }}>
+                <tr key={app.id}>
+                  <td>{app.company}</td>
+                  <td>{app.role}</td>
+                  <td>
+                    <span className={`status-badge status-${app.status}`}>
+                      {app.status}
+                    </span>
+                  </td>
+                  <td>
                     {app.applied_date
                       ? new Date(app.applied_date).toLocaleDateString()
                       : "-"}
                   </td>
-                  <td style={{ padding: "8px" }}>{app.notes || "-"}</td>
-                  <td style={{ padding: "8px" }}>
+                  <td>{app.notes || "-"}</td>
+                  <td>
                     <button
+                      className="btn-small"
                       onClick={() => startEdit(app)}
-                      style={{ marginRight: "4px" }}
                     >
                       Edit
                     </button>
-                    <button onClick={() => handleDelete(app.id)}>Delete</button>
+                    <button
+                      className="btn-small btn-danger"
+                      onClick={() => handleDelete(app.id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ),

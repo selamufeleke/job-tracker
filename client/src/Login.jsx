@@ -9,7 +9,7 @@ function Login() {
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
-    e.preventDefault(); // stops the page from reloading
+    e.preventDefault();
     setError("");
 
     try {
@@ -22,33 +22,25 @@ function Login() {
   }
 
   return (
-    <div style={{ maxWidth: "400px", margin: "100px auto" }}>
-      <h2>Login</h2>
+    <div className="auth-container">
+      <h2>Welcome back</h2>
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "10px" }}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: "100%", padding: "8px" }}
-            required
-          />
-        </div>
-        <div style={{ marginBottom: "10px" }}>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: "100%", padding: "8px" }}
-            required
-          />
-        </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit" style={{ width: "100%", padding: "8px" }}>
-          Log In
-        </button>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        {error && <p className="error-text">{error}</p>}
+        <button type="submit">Log In</button>
       </form>
       <p>
         Don't have an account? <Link to="/register">Register here</Link>
