@@ -1,6 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "./api";
+import { useToast } from "./Toast";
+import ConfirmModal from "./ConfirmModal";
+import StatsCards from "./StatsCards";
+import KanbanBoard from "./KanbanBoard";
 
 function Dashboard() {
   const [applications, setApplications] = useState([]);
@@ -20,7 +24,16 @@ function Dashboard() {
   const [editAppliedDate, setEditAppliedDate] = useState("");
   const [editNotes, setEditNotes] = useState("");
 
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [sortKey, setSortKey] = useState("created_at");
+  const [sortDir, setSortDir] = useState("desc");
+  const [view, setView] = useState("table"); // "table" or "kanban"
+
+  const [deleteTarget, setDeleteTarget] = useState(null);
+
   const navigate = useNavigate();
+  const showToast = useToast();
 
   useEffect(() => {
     fetchApplications();
@@ -53,17 +66,25 @@ function Dashboard() {
       setAppliedDate("");
       setNotes("");
       fetchApplications();
+      showToast("Application added!");
     } catch (err) {
-      setError("Could not add application");
+      showToast("Could not add application", "error");
     }
   }
 
-  async function handleDelete(id) {
+  function requestDelete(id) {
+    setDeleteTarget(id);
+  }
+
+  async function confirmDelete() {
     try {
-      await api.delete(`/applications/${id}`);
+      await api.delete(`/applications/${deleteTarget}`);
       fetchApplications();
+      showToast("Application deleted");
     } catch (err) {
-      setError("Could not delete application");
+      showToast("Could not delete application", "error");
+    } finally {
+      setDeleteTarget(null);
     }
   }
 
@@ -91,8 +112,9 @@ function Dashboard() {
       });
       setEditingId(null);
       fetchApplications();
+      showToast("Application updated!");
     } catch (err) {
-      setError("Could not update application");
+      showToast("Could not update application", "error");
     }
   }
 
@@ -100,6 +122,48 @@ function Dashboard() {
     localStorage.removeItem("token");
     navigate("/login");
   }
+
+  function toggleSort(key) {
+    if (sortKey === key) {
+      setSortDir(sortDir === "asc" ? "desc" : "asc");
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  }
+
+  // Filter, search, and sort — recalculated whenever any of these change
+  const visibleApplications = useMemo(() => {
+    let result = [...applications];
+
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      result = result.filter(
+        (a) =>
+          a.company.toLowerCase().includes(q) ||
+          a.role.toLowerCase().includes(q),
+      );
+    }
+
+    if (statusFilter !== "all") {
+      result = result.filter((a) => a.status === statusFilter);
+    }
+
+    result.sort((a, b) => {
+      let valA = a[sortKey];
+      let valB = b[sortKey];
+      if (valA === null) valA = "";
+      if (valB === null) valB = "";
+      if (typeof valA === "string") valA = valA.toLowerCase();
+      if (typeof valB === "string") valB = valB.toLowerCase();
+
+      if (valA < valB) return sortDir === "asc" ? -1 : 1;
+      if (valA > valB) return sortDir === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    return result;
+  }, [applications, search, statusFilter, sortKey, sortDir]);
 
   return (
     <div className="dashboard-container">
@@ -109,6 +173,8 @@ function Dashboard() {
           Log Out
         </button>
       </div>
+
+      <StatsCards applications={applications} />
 
       <form className="add-form" onSubmit={handleAddApplication}>
         <h3>Add Application</h3>
@@ -152,24 +218,84 @@ function Dashboard() {
 
       {error && <p className="error-text">{error}</p>}
 
+      <div className="toolbar">
+        <input
+          placeholder="Search by company or role..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          <option value="all">All statuses</option>
+          <option value="applied">Applied</option>
+          <option value="interview">Interview</option>
+          <option value="offer">Offer</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <div className="view-toggle">
+          <button
+            className={view === "table" ? "active" : ""}
+            onClick={() => setView("table")}
+          >
+            Table
+          </button>
+          <button
+            className={view === "kanban" ? "active" : ""}
+            onClick={() => setView("kanban")}
+          >
+            Kanban
+          </button>
+        </div>
+      </div>
+
       {loading ? (
         <p>Loading...</p>
-      ) : applications.length === 0 ? (
-        <p>No applications yet. Add one above.</p>
+      ) : visibleApplications.length === 0 ? (
+        <p>No applications match your search/filter.</p>
+      ) : view === "kanban" ? (
+        <KanbanBoard
+          applications={visibleApplications}
+          onEdit={startEdit}
+          onDelete={requestDelete}
+        />
       ) : (
         <table className="applications-table">
           <thead>
             <tr>
-              <th>Company</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th>Date</th>
+              <th
+                className="sortable-header"
+                onClick={() => toggleSort("company")}
+              >
+                Company{" "}
+                {sortKey === "company" && (sortDir === "asc" ? "↑" : "↓")}
+              </th>
+              <th
+                className="sortable-header"
+                onClick={() => toggleSort("role")}
+              >
+                Role {sortKey === "role" && (sortDir === "asc" ? "↑" : "↓")}
+              </th>
+              <th
+                className="sortable-header"
+                onClick={() => toggleSort("status")}
+              >
+                Status {sortKey === "status" && (sortDir === "asc" ? "↑" : "↓")}
+              </th>
+              <th
+                className="sortable-header"
+                onClick={() => toggleSort("applied_date")}
+              >
+                Date{" "}
+                {sortKey === "applied_date" && (sortDir === "asc" ? "↑" : "↓")}
+              </th>
               <th>Notes</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {applications.map((app) =>
+            {visibleApplications.map((app) =>
               editingId === app.id ? (
                 <tr key={app.id}>
                   <td>
@@ -247,7 +373,7 @@ function Dashboard() {
                     </button>
                     <button
                       className="btn-small btn-danger"
-                      onClick={() => handleDelete(app.id)}
+                      onClick={() => requestDelete(app.id)}
                     >
                       Delete
                     </button>
@@ -258,6 +384,14 @@ function Dashboard() {
           </tbody>
         </table>
       )}
+
+      <ConfirmModal
+        open={deleteTarget !== null}
+        title="Delete this application?"
+        message="This action cannot be undone."
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }
