@@ -5,6 +5,7 @@ import { useToast } from "./Toast";
 import ConfirmModal from "./ConfirmModal";
 import StatsCards from "./StatsCards";
 import KanbanBoard from "./KanbanBoard";
+import CoverLetterModal from "./CoverLetterModal";
 
 function Dashboard() {
   const [applications, setApplications] = useState([]);
@@ -31,6 +32,7 @@ function Dashboard() {
   const [view, setView] = useState("table"); // "table" or "kanban"
 
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [coverLetterApp, setCoverLetterApp] = useState(null);
 
   const navigate = useNavigate();
   const showToast = useToast();
@@ -372,6 +374,12 @@ function Dashboard() {
                       Edit
                     </button>
                     <button
+                      className="btn-small"
+                      onClick={() => setCoverLetterApp(app)}
+                    >
+                      AI Letter
+                    </button>
+                    <button
                       className="btn-small btn-danger"
                       onClick={() => requestDelete(app.id)}
                     >
@@ -392,6 +400,12 @@ function Dashboard() {
         onConfirm={confirmDelete}
         onCancel={() => setDeleteTarget(null)}
       />
+      {coverLetterApp && (
+        <CoverLetterModal
+          app={coverLetterApp}
+          onClose={() => setCoverLetterApp(null)}
+        />
+      )}
     </div>
   );
 }

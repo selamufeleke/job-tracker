@@ -457,3 +457,37 @@ body {
     grid-template-columns: 1fr;
   }
 }
+.cover-letter-box {
+  max-width: 500px;
+}
+
+.modal-subtitle {
+  color: #667085;
+  font-size: 14px;
+  margin-top: -8px;
+}
+
+.modal-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #344054;
+  margin-bottom: 4px;
+  margin-top: 12px;
+}
+
+.cover-letter-box textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #d0d5dd;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.cover-letter-result {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eaecf0;
+}
