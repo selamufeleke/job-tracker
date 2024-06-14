@@ -6,6 +6,7 @@ import ConfirmModal from "./ConfirmModal";
 import StatsCards from "./StatsCards";
 import KanbanBoard from "./KanbanBoard";
 import CoverLetterModal from "./CoverLetterModal";
+import Sidebar from "./Sidebar";
 
 function Dashboard() {
   const [applications, setApplications] = useState([]);
@@ -167,14 +168,15 @@ function Dashboard() {
     return result;
   }, [applications, search, statusFilter, sortKey, sortDir]);
 
-  return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h1>My Applications</h1>
-        <button className="btn-secondary" onClick={handleLogout}>
-          Log Out
-        </button>
-      </div>
+return (
+  <div className="app-shell">
+    <Sidebar view={view} setView={setView} onLogout={handleLogout} />
+    <div className="main-content">
+      <div className="dashboard-container">
+        <div className="dashboard-header">
+          <h1>My Applications</h1>
+     
+        </div>
 
       <StatsCards applications={applications} />
 
@@ -393,20 +395,20 @@ function Dashboard() {
         </table>
       )}
 
-      <ConfirmModal
-        open={deleteTarget !== null}
-        title="Delete this application?"
-        message="This action cannot be undone."
-        onConfirm={confirmDelete}
-        onCancel={() => setDeleteTarget(null)}
-      />
-      {coverLetterApp && (
-        <CoverLetterModal
-          app={coverLetterApp}
-          onClose={() => setCoverLetterApp(null)}
+<ConfirmModal
+          open={deleteTarget !== null}
+          title="Delete this application?"
+          message="This action cannot be undone."
+          onConfirm={confirmDelete}
+          onCancel={() => setDeleteTarget(null)}
         />
-      )}
+
+        {coverLetterApp && (
+          <CoverLetterModal app={coverLetterApp} onClose={() => setCoverLetterApp(null)} />
+        )}
+      </div>
     </div>
+  </div>
   );
 }
 
