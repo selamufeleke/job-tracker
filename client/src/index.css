@@ -491,9 +491,16 @@ body {
   padding-top: 16px;
   border-top: 1px solid #eaecf0;
 }
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
 .app-shell {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .sidebar {
@@ -577,9 +584,9 @@ body {
 
 .main-content {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: scroll;
+  height: 100vh;
 }
-
 .dashboard-container {
   max-width: 1000px;
   margin: 40px auto;

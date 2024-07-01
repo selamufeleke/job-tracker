@@ -5,7 +5,7 @@ const COLUMNS = [
   { key: "rejected", label: "Rejected" },
 ];
 
-function KanbanBoard({ applications, onEdit, onDelete }) {
+function KanbanBoard({ applications, onEdit, onDelete, onCoverLetter }) {
   return (
     <div className="kanban-board">
       {COLUMNS.map((col) => (
@@ -29,6 +29,12 @@ function KanbanBoard({ applications, onEdit, onDelete }) {
                   <div className="kanban-card-actions">
                     <button className="btn-small" onClick={() => onEdit(app)}>
                       Edit
+                    </button>
+                    <button
+                      className="btn-small"
+                      onClick={() => onCoverLetter(app)}
+                    >
+                      AI Letter
                     </button>
                     <button
                       className="btn-small btn-danger"

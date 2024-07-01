@@ -251,6 +251,7 @@ function Dashboard() {
               applications={visibleApplications}
               onEdit={startEdit}
               onDelete={requestDelete}
+              onCoverLetter={setCoverLetterApp}
             />
           ) : (
             <table className="applications-table">
