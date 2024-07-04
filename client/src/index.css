@@ -611,3 +611,135 @@ body {
     padding-top: 0;
   }
 }
+/* ===== Animations & Transitions ===== */
+
+/* Page fade-in on load */
+.dashboard-container {
+  animation: fadeIn 0.35s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Smooth transitions on interactive elements */
+button, .sidebar-link, input, select, .stat-card, .kanban-card, .applications-table tr {
+  transition: all 0.15s ease;
+}
+
+/* Button press feedback */
+button:active {
+  transform: scale(0.97);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.btn-secondary:hover,
+.btn-small:hover {
+  transform: translateY(-1px);
+}
+
+/* Stat cards lift on hover */
+.stat-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+/* Table rows highlight smoothly */
+.applications-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.applications-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Kanban cards lift on hover */
+.kanban-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kanban-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Kanban cards animate in */
+.kanban-card {
+  animation: cardIn 0.25s ease-out;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Modal entrance animation */
+.modal-overlay {
+  animation: overlayFadeIn 0.2s ease-out;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-box {
+  animation: modalPopIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalPopIn {
+  from { opacity: 0; transform: scale(0.92) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Sidebar link smooth active state */
+.sidebar-link {
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.sidebar-link:hover {
+  transform: translateX(2px);
+}
+
+/* Status badge subtle pop on render */
+.status-badge {
+  transition: transform 0.15s ease;
+}
+
+.status-badge:hover {
+  transform: scale(1.05);
+}
+
+/* Toast slide-out (in addition to existing slide-in) */
+.toast {
+  animation: slideIn 0.25s ease-out;
+}
+
+/* View toolbar fade-in */
+.toolbar {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Smooth focus states on inputs */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Kanban column stagger effect */
+.kanban-column:nth-child(1) .kanban-card { animation-delay: 0s; }
+.kanban-column:nth-child(2) .kanban-card { animation-delay: 0.03s; }
+.kanban-column:nth-child(3) .kanban-card { animation-delay: 0.06s; }
+.kanban-column:nth-child(4) .kanban-card { animation-delay: 0.09s; }
