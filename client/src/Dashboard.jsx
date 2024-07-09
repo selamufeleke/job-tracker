@@ -7,6 +7,7 @@ import StatsCards from "./StatsCards";
 import KanbanBoard from "./KanbanBoard";
 import CoverLetterModal from "./CoverLetterModal";
 import Sidebar from "./Sidebar";
+import FitScoreModal from "./FitScoreModal";
 
 function Dashboard() {
   const [applications, setApplications] = useState([]);
@@ -34,6 +35,7 @@ function Dashboard() {
 
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [coverLetterApp, setCoverLetterApp] = useState(null);
+  const [fitScoreApp, setFitScoreApp] = useState(null);
 
   const navigate = useNavigate();
   const showToast = useToast();
@@ -252,6 +254,7 @@ function Dashboard() {
               onEdit={startEdit}
               onDelete={requestDelete}
               onCoverLetter={setCoverLetterApp}
+              onFitScore={setFitScoreApp}
             />
           ) : (
             <table className="applications-table">
@@ -373,6 +376,12 @@ function Dashboard() {
                           AI Letter
                         </button>
                         <button
+                          className="btn-small"
+                          onClick={() => setFitScoreApp(app)}
+                        >
+                          Fit Score
+                        </button>
+                        <button
                           className="btn-small btn-danger"
                           onClick={() => requestDelete(app.id)}
                         >
@@ -398,6 +407,12 @@ function Dashboard() {
             <CoverLetterModal
               app={coverLetterApp}
               onClose={() => setCoverLetterApp(null)}
+            />
+          )}
+          {fitScoreApp && (
+            <FitScoreModal
+              app={fitScoreApp}
+              onClose={() => setFitScoreApp(null)}
             />
           )}
         </div>

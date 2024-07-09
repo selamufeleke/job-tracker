@@ -5,7 +5,13 @@ const COLUMNS = [
   { key: "rejected", label: "Rejected" },
 ];
 
-function KanbanBoard({ applications, onEdit, onDelete, onCoverLetter }) {
+function KanbanBoard({
+  applications,
+  onEdit,
+  onDelete,
+  onCoverLetter,
+  onFitScore,
+}) {
   return (
     <div className="kanban-board">
       {COLUMNS.map((col) => (
@@ -35,6 +41,12 @@ function KanbanBoard({ applications, onEdit, onDelete, onCoverLetter }) {
                       onClick={() => onCoverLetter(app)}
                     >
                       AI Letter
+                    </button>
+                    <button
+                      className="btn-small"
+                      onClick={() => onFitScore(app)}
+                    >
+                      Fit Score
                     </button>
                     <button
                       className="btn-small btn-danger"

@@ -619,12 +619,24 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Smooth transitions on interactive elements */
-button, .sidebar-link, input, select, .stat-card, .kanban-card, .applications-table tr {
+button,
+.sidebar-link,
+input,
+select,
+.stat-card,
+.kanban-card,
+.applications-table tr {
   transition: all 0.15s ease;
 }
 
@@ -645,12 +657,14 @@ button:active {
 
 /* Stat cards lift on hover */
 .stat-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .stat-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 /* Table rows highlight smoothly */
@@ -664,12 +678,14 @@ button:active {
 
 /* Kanban cards lift on hover */
 .kanban-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .kanban-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Kanban cards animate in */
@@ -678,8 +694,14 @@ button:active {
 }
 
 @keyframes cardIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Modal entrance animation */
@@ -688,8 +710,12 @@ button:active {
 }
 
 @keyframes overlayFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-box {
@@ -697,13 +723,22 @@ button:active {
 }
 
 @keyframes modalPopIn {
-  from { opacity: 0; transform: scale(0.92) translateY(10px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 /* Sidebar link smooth active state */
 .sidebar-link {
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease;
 }
 
 .sidebar-link:hover {
@@ -739,7 +774,68 @@ textarea:focus {
 }
 
 /* Kanban column stagger effect */
-.kanban-column:nth-child(1) .kanban-card { animation-delay: 0s; }
-.kanban-column:nth-child(2) .kanban-card { animation-delay: 0.03s; }
-.kanban-column:nth-child(3) .kanban-card { animation-delay: 0.06s; }
-.kanban-column:nth-child(4) .kanban-card { animation-delay: 0.09s; }
+.kanban-column:nth-child(1) .kanban-card {
+  animation-delay: 0s;
+}
+.kanban-column:nth-child(2) .kanban-card {
+  animation-delay: 0.03s;
+}
+.kanban-column:nth-child(3) .kanban-card {
+  animation-delay: 0.06s;
+}
+.kanban-column:nth-child(4) .kanban-card {
+  animation-delay: 0.09s;
+}
+.fit-score-result {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eaecf0;
+  text-align: center;
+}
+
+.fit-score-circle {
+  width: 100px;
+  height: 100px;
+  border: 6px solid;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px auto;
+  font-weight: 700;
+  font-size: 28px;
+}
+
+.fit-score-circle small {
+  font-size: 11px;
+  color: #98a2b3;
+  font-weight: 400;
+}
+
+.fit-score-section {
+  text-align: left;
+  margin-bottom: 12px;
+}
+
+.fit-score-section h4 {
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: #344054;
+}
+
+.fit-score-section ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: #475467;
+}
+
+.fit-score-advice {
+  text-align: left;
+  font-size: 13px;
+  background: #f4f6f8;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
