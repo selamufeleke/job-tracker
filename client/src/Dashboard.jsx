@@ -19,6 +19,7 @@ function Dashboard() {
   const [status, setStatus] = useState("applied");
   const [appliedDate, setAppliedDate] = useState("");
   const [notes, setNotes] = useState("");
+  const [cvFile, setCvFile] = useState(null);
 
   const [editingId, setEditingId] = useState(null);
   const [editCompany, setEditCompany] = useState("");
@@ -81,25 +82,35 @@ function Dashboard() {
   async function handleAddApplication(e) {
     e.preventDefault();
     try {
-      await api.post("/applications", {
+      const response = await api.post("/applications", {
         company,
         role,
         status,
         applied_date: appliedDate || null,
         notes,
       });
+
+      // If a CV was selected, upload it right after creating the application
+      if (cvFile) {
+        const formData = new FormData();
+        formData.append("cv", cvFile);
+        await api.post(`/applications/${response.data.id}/cv`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
+
       setCompany("");
       setRole("");
       setStatus("applied");
       setAppliedDate("");
       setNotes("");
+      setCvFile(null);
       fetchApplications();
       showToast("Application added!");
     } catch (err) {
       showToast("Could not add application", "error");
     }
   }
-
   function requestDelete(id) {
     setDeleteTarget(id);
   }
@@ -219,6 +230,21 @@ function Dashboard() {
                 onChange={(e) => setRole(e.target.value)}
                 required
               />
+              <label
+                className="btn-small cv-upload-label"
+                style={{ marginRight: "8px" }}
+              >
+                {cvFile
+                  ? cvFile.name.slice(0, 15) +
+                    (cvFile.name.length > 15 ? "…" : "")
+                  : "Attach CV"}
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  style={{ display: "none" }}
+                  onChange={(e) => setCvFile(e.target.files[0] || null)}
+                />
+              </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
@@ -404,19 +430,6 @@ function Dashboard() {
                         >
                           Fit Score
                         </button>
-                        <label className="btn-small cv-upload-label">
-                          {app.cv_filename ? "Replace CV" : "Upload CV"}
-                          <input
-                            type="file"
-                            accept=".pdf,.doc,.docx"
-                            style={{ display: "none" }}
-                            onChange={(e) => {
-                              if (e.target.files[0])
-                                handleCvUpload(app.id, e.target.files[0]);
-                              e.target.value = "";
-                            }}
-                          />
-                        </label>
                         {app.cv_filename && (
                           <button
                             className="btn-small"
