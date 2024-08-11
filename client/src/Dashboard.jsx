@@ -54,6 +54,29 @@ function Dashboard() {
       setLoading(false);
     }
   }
+  async function handleCvUpload(id, file) {
+    const formData = new FormData();
+    formData.append("cv", file);
+
+    try {
+      await api.post(`/applications/${id}/cv`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      showToast("CV uploaded!");
+      fetchApplications();
+    } catch (err) {
+      showToast("Could not upload CV", "error");
+    }
+  }
+
+  function handleViewCv(id) {
+    const token = localStorage.getItem("token");
+    // Open in a new tab, passing the token as a query param since browser tabs can't send custom headers
+    window.open(
+      `${api.defaults.baseURL}/applications/${id}/cv?token=${token}`,
+      "_blank",
+    );
+  }
 
   async function handleAddApplication(e) {
     e.preventDefault();
@@ -381,6 +404,27 @@ function Dashboard() {
                         >
                           Fit Score
                         </button>
+                        <label className="btn-small cv-upload-label">
+                          {app.cv_filename ? "Replace CV" : "Upload CV"}
+                          <input
+                            type="file"
+                            accept=".pdf,.doc,.docx"
+                            style={{ display: "none" }}
+                            onChange={(e) => {
+                              if (e.target.files[0])
+                                handleCvUpload(app.id, e.target.files[0]);
+                              e.target.value = "";
+                            }}
+                          />
+                        </label>
+                        {app.cv_filename && (
+                          <button
+                            className="btn-small"
+                            onClick={() => handleViewCv(app.id)}
+                          >
+                            View CV
+                          </button>
+                        )}
                         <button
                           className="btn-small btn-danger"
                           onClick={() => requestDelete(app.id)}
