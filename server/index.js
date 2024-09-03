@@ -28,6 +28,7 @@ app.get("/test-db", async (req, res) => {
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/applications", require("./routes/applications"));
 app.use("/api/ai", require("./routes/ai"));
+app.use("/api/jobs", require("./routes/jobs"));
 const PORT = process.env.PORT || 5000;
 // Run automatically every hour
 cron.schedule("0 * * * *", () => {
