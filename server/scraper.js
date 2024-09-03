@@ -12,10 +12,15 @@ async function scrapeFreelanceEthio() {
     // Each post on the public preview page lives in this wrapper
     const posts = $(".tgme_widget_message_text");
 
+    console.log(`Found ${posts.length} total posts`);
+
     for (const el of posts.toArray()) {
       const text = $(el).text().trim();
 
-      // Only process posts that look like an actual job listing
+      console.log("---POST START---");
+      console.log(text.slice(0, 200)); // print first 200 characters of every post
+      console.log("---POST END---");
+
       if (!text.includes("Job Title:")) continue;
 
       const title = extractField(text, "Job Title");
