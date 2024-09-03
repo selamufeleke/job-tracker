@@ -1,13 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
 import api from "./api";
 import { useToast } from "./Toast";
-
+import { useNavigate } from "react-router-dom";
+import Sidebar from "./Sidebar";
 function BrowseJobs() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const showToast = useToast();
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchJobs();
   }, []);
@@ -36,7 +37,10 @@ function BrowseJobs() {
       showToast("Could not add to tracker", "error");
     }
   }
-
+  function handleLogout() {
+    localStorage.removeItem("token");
+    navigate("/login");
+  }
   const visibleJobs = useMemo(() => {
     if (!search.trim()) return jobs;
     const q = search.toLowerCase();
@@ -49,67 +53,72 @@ function BrowseJobs() {
   }, [jobs, search]);
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <h1>Browse Jobs</h1>
-      </div>
+    <div className="app-shell">
+      <Sidebar view={null} setView={() => {}} onLogout={handleLogout} />
+      <div className="main-content">
+        <div className="dashboard-container">
+          <div className="dashboard-header">
+            <h1>Browse Jobs</h1>
+          </div>
 
-      <p style={{ color: "#667085", marginTop: "-8px" }}>
-        Live job postings from Telegram — click a listing to view full details
-        and apply directly in Telegram.
-      </p>
+          <p style={{ color: "#667085", marginTop: "-8px" }}>
+            Live job postings from Telegram — click a listing to view full
+            details and apply directly in Telegram.
+          </p>
 
-      <div className="toolbar">
-        <input
-          placeholder="Search by title, location, or type..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+          <div className="toolbar">
+            <input
+              placeholder="Search by title, location, or type..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
 
-      {loading ? (
-        <p>Loading jobs...</p>
-      ) : visibleJobs.length === 0 ? (
-        <p>No jobs found.</p>
-      ) : (
-        <div className="job-list">
-          {visibleJobs.map((job) => (
-            <div key={job.id} className="job-card">
-              <div className="job-card-main">
-                <h3>{job.title}</h3>
-                <div className="job-card-meta">
-                  {job.job_type && <span>{job.job_type}</span>}
-                  {job.location && <span>📍 {job.location}</span>}
-                  {job.salary && <span>💰 {job.salary}</span>}
-                  {job.deadline && <span>⏳ Deadline: {job.deadline}</span>}
+          {loading ? (
+            <p>Loading jobs...</p>
+          ) : visibleJobs.length === 0 ? (
+            <p>No jobs found.</p>
+          ) : (
+            <div className="job-list">
+              {visibleJobs.map((job) => (
+                <div key={job.id} className="job-card">
+                  <div className="job-card-main">
+                    <h3>{job.title}</h3>
+                    <div className="job-card-meta">
+                      {job.job_type && <span>{job.job_type}</span>}
+                      {job.location && <span>📍 {job.location}</span>}
+                      {job.salary && <span>💰 {job.salary}</span>}
+                      {job.deadline && <span>⏳ Deadline: {job.deadline}</span>}
+                    </div>
+                    {job.description && (
+                      <p className="job-card-description">
+                        {job.description.slice(0, 180)}
+                        {job.description.length > 180 ? "..." : ""}
+                      </p>
+                    )}
+                  </div>
+                  <div className="job-card-actions">
+                    <a
+                      href="https://t.me/afriworkapplicantbot"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-primary job-apply-link"
+                    >
+                      View Details & Apply
+                    </a>
+                    <button
+                      className="btn-secondary"
+                      onClick={() => handleAddToTracker(job)}
+                    >
+                      Add to Tracker
+                    </button>
+                  </div>
                 </div>
-                {job.description && (
-                  <p className="job-card-description">
-                    {job.description.slice(0, 180)}
-                    {job.description.length > 180 ? "..." : ""}
-                  </p>
-                )}
-              </div>
-              <div className="job-card-actions">
-                <a
-                  href="https://t.me/afriworkapplicantbot"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary job-apply-link"
-                >
-                  View Details & Apply
-                </a>
-                <button
-                  className="btn-secondary"
-                  onClick={() => handleAddToTracker(job)}
-                >
-                  Add to Tracker
-                </button>
-              </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

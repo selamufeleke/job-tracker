@@ -4,7 +4,7 @@ import Register from "./Register";
 import Dashboard from "./Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import { ToastProvider } from "./Toast";
-
+import BrowseJobs from "./BrowseJobs";
 function App() {
   return (
     <ToastProvider>
@@ -17,6 +17,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/jobs"
+            element={
+              <ProtectedRoute>
+                <BrowseJobs />
               </ProtectedRoute>
             }
           />
