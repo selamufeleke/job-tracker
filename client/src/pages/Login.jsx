@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import api from "./api";
+import api from "../api";
 
-function Register() {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -14,17 +13,17 @@ function Register() {
     setError("");
 
     try {
-      await api.post("/auth/register", { email, password });
-      setSuccess(true);
-      setTimeout(() => navigate("/login"), 1500);
+      const response = await api.post("/auth/login", { email, password });
+      localStorage.setItem("token", response.data.token);
+      navigate("/dashboard");
     } catch (err) {
-      setError("Could not register. That email may already be taken.");
+      setError("Invalid email or password");
     }
   }
 
   return (
     <div className="auth-container">
-      <h2>Create your account</h2>
+      <h2>Welcome back</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -41,18 +40,13 @@ function Register() {
           required
         />
         {error && <p className="error-text">{error}</p>}
-        {success && (
-          <p className="success-text">
-            Account created! Redirecting to login...
-          </p>
-        )}
-        <button type="submit">Register</button>
+        <button type="submit">Log In</button>
       </form>
       <p>
-        Already have an account? <Link to="/login">Log in here</Link>
+        Don't have an account? <Link to="/register">Register here</Link>
       </p>
     </div>
   );
 }
 
-export default Register;
+export default Login;
