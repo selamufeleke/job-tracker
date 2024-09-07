@@ -17,6 +17,9 @@ app.get("/api/scrape-now", async (req, res) => {
   await scrapeFreelanceEthio();
   res.json({ message: "Scrape complete, check server logs" });
 });
+app.get("/ping", (req, res) => {
+  res.json({ message: "pong", version: "test-v2" });
+});
 app.get("/test-db", async (req, res) => {
   try {
     const result = await pool.query("SELECT NOW()");
