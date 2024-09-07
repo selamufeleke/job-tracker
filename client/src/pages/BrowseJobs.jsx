@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
-import api from "./api";
-import { useToast } from "./Toast";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import api from "../api";
+import { useToast } from "../components/Toast";
+import Sidebar from "../components/Sidebar";
 function BrowseJobs() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);

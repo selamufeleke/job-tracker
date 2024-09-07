@@ -1,13 +1,13 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
-import { useToast } from "../Toast";
-import ConfirmModal from "../ConfirmModal";
-import StatsCards from "../StatsCards";
-import KanbanBoard from "../KanbanBoard";
-import CoverLetterModal from "../CoverLetterModal";
-import Sidebar from "../Sidebar";
-import FitScoreModal from "../FitScoreModal";
+import { useToast } from "../components/Toast";
+import ConfirmModal from "../components/ConfirmModal";
+import StatsCards from "../components/StatsCards";
+import KanbanBoard from "../components/KanbanBoard";
+import CoverLetterModal from "../components/CoverLetterModal";
+import Sidebar from "../components/Sidebar";
+import FitScoreModal from "../components/FitScoreModal";
 
 function Dashboard() {
   const [applications, setApplications] = useState([]);

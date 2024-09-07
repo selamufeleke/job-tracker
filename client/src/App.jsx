@@ -1,10 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./Login";
-import Register from "./Register";
-import Dashboard from "./Dashboard";
-import ProtectedRoute from "./ProtectedRoute";
-import { ToastProvider } from "./Toast";
-import BrowseJobs from "./BrowseJobs";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import BrowseJobs from "./pages/BrowseJobs";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { ToastProvider } from "./components/Toast";
+
 function App() {
   return (
     <ToastProvider>
