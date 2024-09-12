@@ -49,6 +49,20 @@ async function scrapeFreelanceEthio() {
         totalChecked++;
 
         if (!text.includes("Job Title:")) continue;
+        // Find the "View Details" button link within this same post
+        let applyLink = null;
+        $(wrapper)
+          .find("a")
+          .each((i, a) => {
+            const href = $(a).attr("href");
+            if (
+              href &&
+              href.includes("afriworkapplicantbot") &&
+              href.includes("startapp=")
+            ) {
+              applyLink = href;
+            }
+          });
 
         const fields = extractLabeledFields(text);
         const title = fields["Job Title"];
@@ -63,10 +77,10 @@ async function scrapeFreelanceEthio() {
 
         try {
           const result = await pool.query(
-            `INSERT INTO jobs (title, job_type, location, salary, deadline, description, raw_text)
-             VALUES ($1, $2, $3, $4, $5, $6, $7)
-             ON CONFLICT (raw_text) DO NOTHING
-             RETURNING id`,
+            `INSERT INTO jobs (title, job_type, location, salary, deadline, description, raw_text, apply_link)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+     ON CONFLICT (raw_text) DO NOTHING
+     RETURNING id`,
             [
               title.slice(0, 480),
               jobType ? jobType.slice(0, 95) : null,
@@ -75,6 +89,7 @@ async function scrapeFreelanceEthio() {
               deadline ? deadline.slice(0, 95) : null,
               description,
               text,
+              applyLink,
             ],
           );
           if (result.rows.length > 0) totalProcessed++;

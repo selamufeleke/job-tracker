@@ -99,7 +99,9 @@ function BrowseJobs() {
                   </div>
                   <div className="job-card-actions">
                     <a
-                      href="https://t.me/afriworkapplicantbot"
+                      href={
+                        job.apply_link || "https://t.me/afriworkapplicantbot"
+                      }
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-primary job-apply-link"
