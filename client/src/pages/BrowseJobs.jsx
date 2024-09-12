@@ -92,8 +92,8 @@ function BrowseJobs() {
                     </div>
                     {job.description && (
                       <p className="job-card-description">
-                        {job.description.slice(0, 180)}
-                        {job.description.length > 180 ? "..." : ""}
+                        {job.description.slice(0, 90)}
+                        {job.description.length > 90 ? "..." : ""}
                       </p>
                     )}
                   </div>
